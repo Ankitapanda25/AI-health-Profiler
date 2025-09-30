@@ -125,6 +125,40 @@ Confidence is averaged from field-level confidences minus a penalty for missing 
 <img width="500" height="400" alt="image" src="https://github.com/user-attachments/assets/c7f91744-14c9-4fcc-9031-5922017eee2d" /> | <img width="auto" height="400" alt="image" src="https://github.com/user-attachments/assets/cb406089-e413-4851-ac9c-9ba84801a22b" />
 
 
+## Flowchart
+flowchart TD
+    A[Client\n(Thunder/ Postman/ curl)] -->|POST /profile| B{Content-Type?}
+
+    B -->|application/json| C[JSON Path]
+    B -->|multipart/form-data\nwith form_image| D[OCR Path]
+    B -->|other/none| E[400\nincomplete_profile: no input]
+
+    %% JSON path
+    C --> C1[server.js\nreq.body = {age, smoker, exercise, diet}]
+    C1 --> G[profileFromInput({ textJson, ocrKv })]
+
+    %% OCR path
+    D --> D1[server.js\nmulter.memoryStorage()]
+    D1 --> D2[ocrImageToText(buffer)\n(tesseract.js)]
+    D2 -->|raw text| D3[kvFromOcrText(text)\n• normalize separators (=，— → :)\n• fuzzy key map (exercize→exercise)\n• keep values raw]
+    D3 --> G
+
+    %% Pipeline
+    G --> H[normalizeKv(raw)\n• age parse & range\n• normBool(YES/NO/1/0)\n• normExercise (maps+fuzzy)\n• normDiet (maps+fuzzy)\n• confidence = avg(field confs) - 0.1*missing]
+    H -->|>50% missing| I[Return\n{status: incomplete_profile,\nreason: '>50% fields missing'}]
+    H -->|OK| J[extractFactors(answers)\n• smoking, low exercise, poor diet]
+
+    J --> K[scoreAndClassify(answers)\n• weighted sum → risk_level]
+    K --> L[recommend(risk_level, factors)]
+    L --> M[server.js returns 200\n{ parsed, factors, risk, recommendations }]
+
+    %% Errors
+    D2 -->|throw| X[500\n{status: error,\nmessage: ocr_processing_failed}]
+    E -->|response| Z[Done]
+    I -->|response| Z
+    M -->|response| Z
+    X -->|response| Z
+
 
 
 
