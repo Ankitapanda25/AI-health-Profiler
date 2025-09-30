@@ -30,21 +30,35 @@ app.post('/profile', upload.single('form_image'), async (req, res) => {
 
     if (hasImage) {
       const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedMimeTypes.includes(req.file.mimetype)) {
-        return respondWithError(res, 415, 'Unsupported image format. Use JPEG, PNG, or WebP.')
-      }
+      if (req.file && req.file.buffer) {
+        console.log("[/profile] File info:", {
+          field: req.file.fieldname,
+          name: req.file.originalname,
+          type: req.file.mimetype,
+          size: req.file.size
+        });
+        const rawText = await ocrImageToText(req.file.buffer);
+        console.log("[/profile] OCR raw text:", rawText);
+        ocrKv = kvFromOcrText(rawText);
+        console.log("[/profile] Parsed KV:", ocrKv);
 
-      try {
-        const ocrText = await ocrImageToText(req.file.buffer);
-        ocrKv = kvFromOcrText(ocrText);
-        if (Object.keys(ocrKv).length === 0) {
-          return respondWithError(res, 422, 'OCR failed or form is unreadable.', 'No recognizable key-value pairs found in the image.')
-        }
-      } catch (ocrErr) {
+
+
+        try {
+          const ocrText = await ocrImageToText(req.file.buffer);
+          console.log("=== OCR RAW TEXT ===");
+          console.log(rawText);
+          ocrKv = kvFromOcrText(ocrText);
+          console.log("=== OCR KV PARSED ===");
+          console.log(ocrKv);
+          if (Object.keys(ocrKv).length === 0) {
+            return respondWithError(res, 422, 'OCR failed or form is unreadable.', 'No recognizable key-value pairs found in the image.')
+          }
+        } catch (ocrErr) {
           return respondWithError(res, 500, 'ocr_processing_failed')
+        }
       }
     }
-
     const result = profileFromInput({ textJson, ocrKv });
 
     if (result.status === 'incomplete_profile') {
