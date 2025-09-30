@@ -118,9 +118,10 @@ Confidence is averaged from field-level confidences minus a penalty for missing 
 <img width="2076" height="650" alt="image" src="https://github.com/user-attachments/assets/6fe25bc1-c822-478b-9a4c-0a2495c56442" /> 
 
 
-<img width="1745" height="1102" alt="image" src="https://github.com/user-attachments/assets/41463139-8134-4b98-93b6-790144d34d90" /> | <img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/7dd2bb16-0b56-4e8d-9b86-0ea2a6ec2b45" />
+<img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/41463139-8134-4b98-93b6-790144d34d90" /> | <img width="200" height="1536" alt="image" src="https://github.com/user-attachments/assets/7dd2bb16-0b56-4e8d-9b86-0ea2a6ec2b45" />
 
 
 
-<img width="1774" height="965" alt="image" src="https://github.com/user-attachments/assets/c7f91744-14c9-4fcc-9031-5922017eee2d" /> | <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/cb406089-e413-4851-ac9c-9ba84801a22b" />
+<img width="200" height="auto" alt="image" src="https://github.com/user-attachments/assets/c7f91744-14c9-4fcc-9031-5922017eee2d" /> | <img width="200" height="1024" alt="image" src="https://github.com/user-attachments/assets/cb406089-e413-4851-ac9c-9ba84801a22b" />
+
 
