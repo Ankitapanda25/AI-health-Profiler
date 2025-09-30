@@ -239,4 +239,5 @@ module.exports = {
   scoreAndClassify,
   recommend,
   profileFromInput,
+  levenshtein
 };
