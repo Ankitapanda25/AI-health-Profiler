@@ -32,7 +32,7 @@ ngrok for public demo
 npm ci
 npm start
 
-Expose locally with ngrok
+#Expose locally with ngrok
 
 ngrok http 3000
 
@@ -158,6 +158,7 @@ flowchart TD
     I -->|response| Z
     M -->|response| Z
     X -->|response| Z
+
 
 
 
